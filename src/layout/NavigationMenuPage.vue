@@ -23,6 +23,10 @@
     </v-menu>
 
     <v-btn text @click="callVuetifyBoard">
+        <span>WebGL Test</span>
+        <v-icon right>mdi-hand-back-left-outline</v-icon>
+    </v-btn>
+    <v-btn text @click="callVuetifyBoard">
       <span>Vuetify 게시판</span>
       <v-icon right>mdi-hand-back-left-outline</v-icon>
     </v-btn>
