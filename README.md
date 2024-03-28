@@ -1,2 +1,2 @@
 # React-TCG-Game
-It's for React-TCG-Game
+It's for Vue-TCG-Game
