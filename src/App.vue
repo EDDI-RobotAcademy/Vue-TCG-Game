@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <navigation-menu-page/>
+        <navigation-menu-page v-if="showNavBar"/>
         <v-main>
             <router-view/>
         </v-main>
@@ -17,6 +17,21 @@ import 'vuetify/styles'
 export default {
     components: {
         NavigationMenuPage
+    },
+    data() {
+        return {
+            showNavBar: true // Navigation Bar 기본적으로 표시
+        };
+    },
+    watch: {
+        '$route'(to) {
+            // 특정 URL에서 Navigation Bar를 숨김
+            if (to.path === '/eddi-tcg-game-battle-field') {
+                this.showNavBar = false;
+            } else {
+                this.showNavBar = true;
+            }
+        }
     }
 }
 </script>
