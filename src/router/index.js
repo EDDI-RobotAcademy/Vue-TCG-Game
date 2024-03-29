@@ -1,11 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import HomeRoutes from "@/home/router/HomeRoutes";
-import EddiTcgGameRoutes from "@/eddi_tcg_game/router/EddiTcgGameRoutes";
+import EddiTcgGameMainLobbyRoutes from "@/eddi_tcg_game_main_lobby/router/EddiTcgGameMainLobbyRoutes";
+import EddiTcgGameBattleFieldRoutes from "@/eddi_tcg_game_battle_field/router/EddiTcgGameBattleFieldRoutes";
 
 const routes = [
     ...HomeRoutes,
-    ...EddiTcgGameRoutes,
+    ...EddiTcgGameMainLobbyRoutes,
+    ...EddiTcgGameBattleFieldRoutes,
 ];
 
 const router = createRouter({
