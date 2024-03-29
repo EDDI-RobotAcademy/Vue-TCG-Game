@@ -1,107 +1,76 @@
 <template>
     <div class="container">
-        <!-- 캔버스 컨테이너 -->
-        <div ref="rendererContainer" class="canvas-container"></div>
-
-        <!-- 배경 이미지 -->
-        <div class="background-image"></div>
-
-<!--        &lt;!&ndash; 추가 이미지 &ndash;&gt;-->
-<!--        <div class="image-grid">-->
-<!--            <button class="image-button" v-for="(image, index) in images" :key="index" @click="handleButtonClick(image)">-->
-<!--                <img :src="image.src" alt="image">-->
-<!--            </button>-->
-<!--        </div>-->
+        <!-- Three.js 캔버스를 Vue.js DOM에 추가 -->
+        <canvas ref="canvas" class="canvas-container"></canvas>
     </div>
 </template>
 
 <script>
 import * as THREE from 'three';
 import battleFieldBackgoundImage from '@/assets/eddi_tcg_game/battle_field/battleFieldBackgoundImage.png';
-import entranceBattleFieldButton from '@/assets/eddi_tcg_game/main_lobby/entranceBattleFieldButton.png';
-import myCardButton from '@/assets/eddi_tcg_game/main_lobby/myCardButton.png';
-import shopButton from '@/assets/eddi_tcg_game/main_lobby/shopButton.png';
-import router from "@/router";
 
 export default {
     data() {
         return {
-            renderer: THREE.WebGLRenderer,
-            images: [
-                { src: entranceBattleFieldButton },
-                { src: myCardButton },
-                { src: shopButton },
-            ],
-            imageUrls: {
-                entranceBattleFieldButton: '/eddi-tcg-game-battle-field', // 예시 URL
-                myCardButton: '/my-card', // 예시 URL
-                shopButton: '/shop' // 예시 URL
-            }
+            src: battleFieldBackgoundImage,
         };
     },
     mounted() {
-        const navbarHeight = document.querySelector('.v-app-bar').clientHeight;
+        // Canvas 요소 가져오기
+        const canvas = this.$refs.canvas;
 
-        this.renderer = new THREE.WebGLRenderer();
-        this.renderer.setSize(window.innerWidth, window.innerHeight - navbarHeight);
-        this.$refs.rendererContainer.appendChild(this.renderer.domElement);
+        // Three.js Scene 생성
+        const scene = new THREE.Scene();
 
-        this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera(
-            75,
-            window.innerWidth / window.innerHeight,
-            0.1,
-            1000
-        );
-        this.camera.position.z = 5;
+        // Three.js Camera 생성
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
 
-        const textureLoader = new THREE.TextureLoader();
-        const backgroundTexture = textureLoader.load(battleFieldBackgoundImage);
-        this.scene.background = backgroundTexture;
+        // Three.js Renderer 생성 및 Canvas에 추가
+        const renderer = new THREE.WebGLRenderer({canvas});
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0xcccccc, 0.0)
 
-        const geometry = new THREE.BoxGeometry();
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        this.cube = new THREE.Mesh(geometry, material);
-        this.scene.add(this.cube);
+        // // 배경 이미지를 Three.js로 그리기
+        // const textureLoader = new THREE.TextureLoader();
+        // const backgroundTexture = textureLoader.load(battleFieldBackgoundImage);
+        // const aspectRatio = window.innerWidth / window.innerHeight;
+        // const backgroundGeometry = new THREE.PlaneGeometry(aspectRatio * 2, 2, 0);
+        // const backgroundMaterial = new THREE.MeshBasicMaterial({map: backgroundTexture});
+        // const backgroundMesh = new THREE.Mesh(backgroundGeometry, backgroundMaterial);
+        // scene.add(backgroundMesh);
 
-        this.animate();
+        // 큐브를 추가하여 Three.js의 렌더링 적용
+        const cubeGeometry = new THREE.BoxGeometry();
+        const cubeMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
+        const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        scene.add(cube);
+
+        // 애니메이션 함수 정의
+        const animate = () => {
+            requestAnimationFrame(animate);
+            // 큐브 회전
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
+            // Three.js Scene 렌더링
+            renderer.render(scene, camera);
+        };
+
+        // 애니메이션 시작
+        animate();
     },
-    methods: {
-        // 이미지에 따라 URL을 가져오는 함수
-        getImageUrl (image) {
-            const imageName = this.getImageName(image.src);
-            return this.imageUrls[imageName] || '/'; // 기본 URL
-        },
-        // 이미지 이름을 가져오는 함수
-        getImageName(src) {
-            return src.split('/').pop().split('.')[0];
-        },
-        // 이미지 클릭 이벤트 핸들러
-        handleButtonClick(image) {
-            const imageUrl = this.getImageUrl(image);
-            // URL을 변경합니다.
-            this.renderer.dispose()
-            router.push(imageUrl);
-        },
-        animate() {
-            this.cube.rotation.x += 0.01;
-            this.cube.rotation.y += 0.01;
-
-            this.renderer.render(this.scene, this.camera);
-            requestAnimationFrame(this.animate);
-        }
-    }
 };
 </script>
 
-<style lang="postcss" scoped>
-#rendererContainer {
-    width: 100%;
-    height: calc(100vh - 64px);
-}
-
+<style scoped>
 .container {
     position: relative;
+    width: 100vw; /* 화면 너비에 맞추기 */
+    height: 100vh; /* 화면 높이에 맞추기 */
+    background-image: url(@/assets/eddi_tcg_game/battle_field/battleFieldBackgoundImage.png);
+    background-size: 100% 100%;
+    /*background-position: center; !* 배경 이미지를 중앙에 정렬하기 *!*/
+    /*background-repeat: no-repeat; !* 배경 이미지 반복 제거 *!*/
 }
 
 .canvas-container {
@@ -109,48 +78,7 @@ export default {
     top: 0;
     left: 0;
     z-index: 0;
-}
-
-.background-image {
-    position: absolute;
-    top: 50%;
-    left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('@/assets/eddi_tcg_game/battle_field/battleFieldBackgoundImage.png');
-    background-size: cover;
-    z-index: -1;
-}
-
-.image-grid {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    transform: translateX(-20%) translateY(70%);
-}
-
-.image-item {
-    margin-bottom: 20px;
-}
-
-.image-item img {
-    max-width: 100px;
-    height: auto;
-}
-
-.image-button {
-    margin-bottom: 20px;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-.image-button img {
-    max-width: 40%;
-    height: auto;
 }
 </style>
