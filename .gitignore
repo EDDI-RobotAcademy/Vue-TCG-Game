@@ -2,6 +2,9 @@
 node_modules
 /dist
 
+# exclude *.png
+*.png
+
 
 # local env files
 .env.local
