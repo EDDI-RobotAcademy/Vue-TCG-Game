@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- 음악 파일을 숨겨진 audio 요소로 추가 -->
-        <audio ref="audioPlayer" :src="require('@/assets/eddi_tcg_game/music/battle_field/battle-field.mp3')" autoplay loop style="display: none;"></audio>
+        <audio ref="audioPlayer" :src="require('@/assets/eddi_tcg_game/music/card_shop/card-shop.mp3')" autoplay loop style="display: none;"></audio>
     </div>
     <div class="container">
         <!-- Three.js 캔버스를 Vue.js DOM에 추가 -->
@@ -11,15 +11,16 @@
 
 <script>
 import * as THREE from 'three';
-import battleFieldBackgoundImage from '@/assets/eddi_tcg_game/images/battle_field/battleFieldBackgoundImage.png';
+import cardShopBackgoundImage from '@/assets/eddi_tcg_game/images/card_shop/cardShopBackgroundImage.png';
 
 export default {
     data() {
         return {
-            src: battleFieldBackgoundImage,
+            src: cardShopBackgoundImage,
         };
     },
     mounted() {
+        const navbarHeight = document.querySelector('.v-app-bar').clientHeight;
         // this.$refs.audioPlayer.play();
         // Canvas 요소 가져오기
         const canvas = this.$refs.canvas;
@@ -28,12 +29,13 @@ export default {
         const scene = new THREE.Scene();
 
         // Three.js Camera 생성
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const aspectRatio = window.innerWidth / window.innerHeight;
+        const camera = new THREE.OrthographicCamera(-aspectRatio, aspectRatio, 1, -1, 0.1, 1000);
         camera.position.z = 5;
 
         // Three.js Renderer 생성 및 Canvas에 추가
         const renderer = new THREE.WebGLRenderer({canvas});
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setSize(window.innerWidth, window.innerHeight - navbarHeight);
         renderer.setClearColor(0xcccccc, 0.0)
 
         // // 배경 이미지를 Three.js로 그리기
@@ -74,8 +76,8 @@ export default {
 .container {
     position: relative;
     width: 100vw; /* 화면 너비에 맞추기 */
-    height: 100vh; /* 화면 높이에 맞추기 */
-    background-image: url(@/assets/eddi_tcg_game/images/battle_field/battleFieldBackgoundImage.png);
+    height: calc(100vh - 64px);
+    background-image: url(@/assets/eddi_tcg_game/images/card_shop/cardShopBackgroundImage.png);
     background-size: 100% 100%;
     /*background-position: center; !* 배경 이미지를 중앙에 정렬하기 *!*/
     /*background-repeat: no-repeat; !* 배경 이미지 반복 제거 *!*/
