@@ -22,7 +22,7 @@
       </v-list>
     </v-menu>
 
-    <v-btn text @click="callVuetifyBoard">
+    <v-btn text @click="callEddiTcgGamePage">
         <span>WebGL Test</span>
         <v-icon right>mdi-hand-back-left-outline</v-icon>
     </v-btn>
@@ -49,6 +49,7 @@
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/dist/vuetify.min.css'
 import 'vuetify/styles'
+import router from "@/router";
 // import {
 //     GITHUB_LOGIN_COMPLETE,
 // } from '@/store/authentication/mutation-types'
@@ -73,6 +74,9 @@ export default {
     },
     methods: {
         // ...mapMutations(authenticationModule, ['GITHUB_LOGIN_COMPLETE']),
+        callEddiTcgGamePage () {
+            router.push('/eddi-tcg-game-main-lobby')
+        },
         clickToggle () {
             alert('토글')
         },
