@@ -5,6 +5,8 @@ node_modules
 # exclude *.png
 *.png
 
+# exclude *.mp3
+*.mp3
 
 # local env files
 .env.local

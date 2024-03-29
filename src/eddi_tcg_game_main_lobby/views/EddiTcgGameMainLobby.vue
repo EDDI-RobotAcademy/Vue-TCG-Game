@@ -1,4 +1,8 @@
 <template>
+    <div>
+        <!-- 음악 파일을 숨겨진 audio 요소로 추가 -->
+        <audio ref="audioPlayer" :src="require('@/assets/eddi_tcg_game/music/main_lobby/main-lobby.mp3')" autoplay loop style="display: none;"></audio>
+    </div>
     <div class="container">
         <!-- 캔버스 컨테이너 -->
         <div ref="rendererContainer" class="canvas-container"></div>
@@ -17,10 +21,10 @@
 
 <script>
 import * as THREE from 'three';
-import mainLobbyBackgroundImage from '@/assets/eddi_tcg_game/main_lobby/mainLobbyBackgroundImage.png';
-import entranceBattleFieldButton from '@/assets/eddi_tcg_game/main_lobby/entranceBattleFieldButton.png';
-import myCardButton from '@/assets/eddi_tcg_game/main_lobby/myCardButton.png';
-import shopButton from '@/assets/eddi_tcg_game/main_lobby/shopButton.png';
+import mainLobbyBackgroundImage from '@/assets/eddi_tcg_game/images/main_lobby/mainLobbyBackgroundImage.png';
+import entranceBattleFieldButton from '@/assets/eddi_tcg_game/images/main_lobby/entranceBattleFieldButton.png';
+import myCardButton from '@/assets/eddi_tcg_game/images/main_lobby/myCardButton.png';
+import shopButton from '@/assets/eddi_tcg_game/images/main_lobby/shopButton.png';
 import router from "@/router";
 
 export default {
@@ -35,7 +39,7 @@ export default {
             imageUrls: {
                 entranceBattleFieldButton: '/eddi-tcg-game-battle-field', // 예시 URL
                 myCardButton: '/my-card', // 예시 URL
-                shopButton: '/shop' // 예시 URL
+                shopButton: '/eddi-tcg-game-card-shop' // 예시 URL
             }
         };
     },
@@ -117,7 +121,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('@/assets/eddi_tcg_game/main_lobby/mainLobbyBackgroundImage.png');
+    background-image: url('@/assets/eddi_tcg_game/images/main_lobby/mainLobbyBackgroundImage.png');
     background-size: cover;
     z-index: -1;
 }
