@@ -1,7 +1,7 @@
 <template>
   <v-app-bar color="primary" app dark height="64">
     <!-- <v-app-bar-nav-icon @click="navigation_drawer = !navigation_drawer"/> -->
-    <v-btn @click="gotoHome">
+    <v-btn @click="goToHome">
       <v-toolbar-title class="text-uppercase text--darken-4">
         <span>EDDI</span>
       </v-toolbar-title>
@@ -91,7 +91,7 @@ export default {
             // this[GITHUB_LOGIN_COMPLETE](false)
         },
         goToHome () {
-            // router.push('/')
+            router.push('/')
         }
     },
     mounted () {
