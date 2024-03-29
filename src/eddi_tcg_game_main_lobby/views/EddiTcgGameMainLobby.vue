@@ -17,15 +17,26 @@
 
 <script>
 import * as THREE from 'three';
-import mainLobbyBackgroundImage from '@/assets/eddi_tcg_game/mainLobbyBackgroundImage.png';
-import entranceBattleFieldButton from '@/assets/eddi_tcg_game/entranceBattleFieldButton.png';
+import mainLobbyBackgroundImage from '@/assets/eddi_tcg_game/main_lobby/mainLobbyBackgroundImage.png';
+import entranceBattleFieldButton from '@/assets/eddi_tcg_game/main_lobby/entranceBattleFieldButton.png';
+import myCardButton from '@/assets/eddi_tcg_game/main_lobby/myCardButton.png';
+import shopButton from '@/assets/eddi_tcg_game/main_lobby/shopButton.png';
+import router from "@/router";
 
 export default {
     data() {
         return {
+            renderer: THREE.WebGLRenderer,
             images: [
                 { src: entranceBattleFieldButton },
-            ]
+                { src: myCardButton },
+                { src: shopButton },
+            ],
+            imageUrls: {
+                entranceBattleFieldButton: '/eddi-tcg-game-battle-field', // 예시 URL
+                myCardButton: '/my-card', // 예시 URL
+                shopButton: '/shop' // 예시 URL
+            }
         };
     },
     mounted() {
@@ -56,6 +67,22 @@ export default {
         this.animate();
     },
     methods: {
+        // 이미지에 따라 URL을 가져오는 함수
+        getImageUrl (image) {
+            const imageName = this.getImageName(image.src);
+            return this.imageUrls[imageName] || '/'; // 기본 URL
+        },
+        // 이미지 이름을 가져오는 함수
+        getImageName(src) {
+            return src.split('/').pop().split('.')[0];
+        },
+        // 이미지 클릭 이벤트 핸들러
+        handleButtonClick(image) {
+            const imageUrl = this.getImageUrl(image);
+            // URL을 변경합니다.
+            this.renderer.dispose()
+            router.push(imageUrl);
+        },
         animate() {
             this.cube.rotation.x += 0.01;
             this.cube.rotation.y += 0.01;
@@ -90,7 +117,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('@/assets/eddi_tcg_game/mainLobbyBackgroundImage.png');
+    background-image: url('@/assets/eddi_tcg_game/main_lobby/mainLobbyBackgroundImage.png');
     background-size: cover;
     z-index: -1;
 }
@@ -103,9 +130,8 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    transform: translateX(-20%) translateY(200%);
+    transform: translateX(-20%) translateY(70%);
 }
-
 
 .image-item {
     margin-bottom: 20px;
