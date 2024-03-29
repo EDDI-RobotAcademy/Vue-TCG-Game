@@ -9,8 +9,10 @@
   },
   "dependencies": {
     "@mdi/font": "5.9.55",
+    "autoprefixer": "^10.4.19",
     "core-js": "^3.8.3",
     "roboto-fontface": "*",
+    "tailwindcss": "^3.4.3",
     "three": "^0.162.0",
     "vue": "^3.2.13",
     "vue-router": "^4.3.0",
@@ -25,6 +27,7 @@
     "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
+    "postcss-preset-env": "^9.5.2",
     "vue-cli-plugin-vuetify": "~2.5.8",
     "webpack-plugin-vuetify": "^2.0.0-alpha.0"
   },
