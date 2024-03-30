@@ -19,7 +19,7 @@ export function calculateCardPosition(cardWidthRatio, cardHeightRatio, aspect) {
 }
 
 export function createMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect) {
-    console.log('cardWidthRatio: ', cardWidthRatio, 'cardHeightRatio: ', cardHeightRatio)
+    // console.log('cardWidthRatio: ', cardWidthRatio, 'cardHeightRatio: ', cardHeightRatio)
     const boneDragonMaterial = new THREE.MeshBasicMaterial({
         color: 0xffffff,
         map: texture,
@@ -30,17 +30,19 @@ export function createMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspe
     const goldenRatio = 1.618;
     const cardHeight = cardWidth * goldenRatio;
     // const cardHeightRatio = 0.17561983471
-    console.log('cardwidth: ', cardWidth, 'cardHeight: ', cardHeight)
+    // console.log('cardwidth: ', cardWidth, 'cardHeight: ', cardHeight)
 
     const cardPosition = calculateCardPosition(cardWidthRatio, cardHeightRatio, aspect);
 
     const boneDragonGeometry = new THREE.PlaneGeometry(cardWidth, cardHeight);
     const boneDragonMesh = new THREE.Mesh(boneDragonGeometry, boneDragonMaterial);
 
-    console.log('createMesh: ', boneDragonMaterial, aspect, boneDragonGeometry, boneDragonMesh)
+    // console.log('createMesh: ', boneDragonMaterial, aspect, boneDragonGeometry, boneDragonMesh)
 
     boneDragonMesh.position.x += cardPosition.x;
     boneDragonMesh.position.y += cardPosition.y;
+
+    boneDragonMesh.userData.isAreaRectangle = false;
 
     scene.add(boneDragonMesh);
 }
