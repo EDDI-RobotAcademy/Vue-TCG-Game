@@ -1,5 +1,8 @@
 # frontend
 
+## Need to consider usage
+vue-threejs or three
+
 ## Project setup
 ```
 npm install
