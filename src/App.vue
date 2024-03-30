@@ -28,6 +28,8 @@ export default {
             // 특정 URL에서 Navigation Bar를 숨김
             if (to.path === '/eddi-tcg-game-battle-field') {
                 this.showNavBar = false;
+            } else if (to.path === '/eddi-tcg-game-my-card') {
+                this.showNavBar = false;
             } else {
                 this.showNavBar = true;
             }
