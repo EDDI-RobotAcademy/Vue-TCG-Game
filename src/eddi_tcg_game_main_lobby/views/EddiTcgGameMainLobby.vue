@@ -37,9 +37,9 @@ export default {
                 { src: shopButton },
             ],
             imageUrls: {
-                entranceBattleFieldButton: '/eddi-tcg-game-battle-field', // 예시 URL
-                myCardButton: '/my-card', // 예시 URL
-                shopButton: '/eddi-tcg-game-card-shop' // 예시 URL
+                entranceBattleFieldButton: '/eddi-tcg-game-battle-field',
+                myCardButton: '/eddi-tcg-game-my-card',
+                shopButton: '/eddi-tcg-game-card-shop',
             }
         };
     },
@@ -83,6 +83,7 @@ export default {
         // 이미지 클릭 이벤트 핸들러
         handleButtonClick(image) {
             const imageUrl = this.getImageUrl(image);
+            console.log('imageUrl: ', imageUrl)
             // URL을 변경합니다.
             this.renderer.dispose()
             router.push(imageUrl);

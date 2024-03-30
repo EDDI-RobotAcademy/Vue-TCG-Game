@@ -23,15 +23,15 @@
     </v-menu>
 
     <v-btn text @click="callEddiTcgGamePage">
-        <span>WebGL Test</span>
+        <span>EDDI TCG Game Start</span>
         <v-icon right>mdi-hand-back-left-outline</v-icon>
     </v-btn>
     <v-btn text @click="callVuetifyBoard">
-      <span>Vuetify 게시판</span>
+      <span>자유 게시판</span>
       <v-icon right>mdi-hand-back-left-outline</v-icon>
     </v-btn>
     <v-btn v-if="isLogin" text @click="myPage">
-      <span>마이페이지</span>
+      <span>마이 페이지</span>
       <v-icon right>mdi-account-plus-outline</v-icon>
     </v-btn>
     <v-btn v-if="!isLogin" text @click="signIn">
