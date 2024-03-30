@@ -12,17 +12,22 @@
 <script>
 import * as THREE from 'three';
 import battleFieldBackgoundImage from '@/assets/eddi_tcg_game/images/battle_field/battleFieldBackgoundImage.png';
-import BoneDragonImage from '@/assets/eddi_tcg_game/images/battle_field_card/134.png';
-import NetherBladeImage from '@/assets/eddi_tcg_game/images/battle_field_card/19.png';
-import KnightOfLightEsterosImage from '@/assets/eddi_tcg_game/images/battle_field_card/23.png';
-import GatesOfHellImage from '@/assets/eddi_tcg_game/images/battle_field_card/45.png';
-import SecondComingOfJudgementImage from '@/assets/eddi_tcg_game/images/battle_field_card/108.png';
-import PhoenixImage from '@/assets/eddi_tcg_game/images/battle_field_card/128.png';
-import WarlordLeonidasImage from '@/assets/eddi_tcg_game/images/battle_field_card/133.png';
-import NecromancerOublyLvMaxImage from '@/assets/eddi_tcg_game/images/battle_field_card/176.png';
+// import BoneDragonImage from '@/assets/eddi_tcg_game/images/battle_field_card/134.png';
+// import NetherBladeImage from '@/assets/eddi_tcg_game/images/battle_field_card/19.png';
+// import KnightOfLightEsterosImage from '@/assets/eddi_tcg_game/images/battle_field_card/23.png';
+// import GatesOfHellImage from '@/assets/eddi_tcg_game/images/battle_field_card/45.png';
+// import SecondComingOfJudgementImage from '@/assets/eddi_tcg_game/images/battle_field_card/108.png';
+// import PhoenixImage from '@/assets/eddi_tcg_game/images/battle_field_card/128.png';
+// import WarlordLeonidasImage from '@/assets/eddi_tcg_game/images/battle_field_card/133.png';
+// import NecromancerOublyLvMaxImage from '@/assets/eddi_tcg_game/images/battle_field_card/176.png';
 
-import { loadImageTexture, createMesh } from '@/components/webgl/image_texture_control.js';
+import UndeadRaceImage from '@/assets/eddi_tcg_game/images/card_race/2.png'
+
+import {loadImageTexture, createCardRaceMesh} from '@/components/webgl/image_texture_control.js';
 import { createRectangle } from '@/components/webgl/shape_control.js';
+
+import { PickableCardControl } from '@/components/your_hand_pickable_card/pickable_card_control.js'
+import ImageTextureKinds from "@/components/image_texture/image_texture_kinds";
 
 export default {
     data() {
@@ -34,10 +39,13 @@ export default {
             // 이동 시작 위치
             startPosition: { x: 0, y: 0 },
             // 마우스 클릭 여부
-            isMouseDown: false
+            isMouseDown: false,
+
+            ppickableCardControl: null
         };
     },
     mounted() {
+        this.initPickableCardControl();
         // Canvas 요소 가져오기
         const canvas = this.$refs.canvas;
 
@@ -70,126 +78,147 @@ export default {
         // const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
         // scene.add(cube);
 
-        const yourFieldAreaRectangle = createRectangle(scene, 2.8, 0.4, 0.1, new THREE.Vector3(0, -0.20867768595041314, 0));
+        const yourFieldAreaRectangle = createRectangle(scene, 2.8, 0.4, 0.0, new THREE.Vector3(0, -0.20867768595041314, 0));
         scene.add(yourFieldAreaRectangle);
 
-        const opponentFieldAreaRectangle = createRectangle(scene, 2.8, 0.4, 0.1, new THREE.Vector3(0, 0.20867768595041314, 0));
+        const opponentFieldAreaRectangle = createRectangle(scene, 2.8, 0.4, 0.0, new THREE.Vector3(0, 0.20867768595041314, 0));
         scene.add(opponentFieldAreaRectangle);
 
-        const yourHandAreaRectangle = createRectangle(scene, 2.0, 0.45, 0.1, new THREE.Vector3(0, -0.72867768595041314, 0));
+        const yourHandAreaRectangle = createRectangle(scene, 2.0, 0.45, 0.0, new THREE.Vector3(0, -0.72867768595041314, 0));
         scene.add(yourHandAreaRectangle);
 
-        loadImageTexture(BoneDragonImage, (imageBitmap) => {
+        this.placeCards(134, scene)
+
+        loadImageTexture(UndeadRaceImage, (imageBitmap) => {
             const texture = new THREE.CanvasTexture(imageBitmap);
             texture.colorSpace = THREE.SRGBColorSpace;
+            // texture.alpha = THREE.AlphaFormat;
+            texture.transparent = true;
+            console.log('texture: ', texture)
 
             // 캔버스 크기에 따라 카드 크기 계산
             const cardWidthRatio = 0.0667567568;
             const cardHeightRatio = 0.17561983471;
 
             // Mesh 생성
-            createMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
+            const cardRaceMesh = createCardRaceMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
+            cardRaceMesh.userData.imageTextureKinds = ImageTextureKinds.FRAME
+            scene.add(cardRaceMesh)
         }, (err) => {
             console.error('An error happened', err);
         });
 
-        loadImageTexture(NetherBladeImage, (imageBitmap) => {
-            const texture = new THREE.CanvasTexture(imageBitmap);
-            texture.colorSpace = THREE.SRGBColorSpace;
+        // loadImageTexture(BoneDragonImage, (imageBitmap) => {
+        //     const texture = new THREE.CanvasTexture(imageBitmap);
+        //     texture.colorSpace = THREE.SRGBColorSpace;
+        //
+        //     // 캔버스 크기에 따라 카드 크기 계산
+        //     const cardWidthRatio = 0.0667567568;
+        //     const cardHeightRatio = 0.17561983471;
+        //
+        //     // Mesh 생성
+        //     createMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
+        // }, (err) => {
+        //     console.error('An error happened', err);
+        // });
 
-            // 캔버스 크기에 따라 카드 크기 계산
-            const cardWidthRatio = 0.0667567568;
-            const cardHeightRatio = 0.17561983471;
-
-            // Mesh 생성
-            createMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
-        }, (err) => {
-            console.error('An error happened', err);
-        });
-
-        loadImageTexture(KnightOfLightEsterosImage, (imageBitmap) => {
-            const texture = new THREE.CanvasTexture(imageBitmap);
-            texture.colorSpace = THREE.SRGBColorSpace;
-
-            // 캔버스 크기에 따라 카드 크기 계산
-            const cardWidthRatio = 0.0667567568;
-            const cardHeightRatio = 0.17561983471;
-
-            // Mesh 생성
-            createMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
-        }, (err) => {
-            console.error('An error happened', err);
-        });
-
-        loadImageTexture(WarlordLeonidasImage, (imageBitmap) => {
-            const texture = new THREE.CanvasTexture(imageBitmap);
-            texture.colorSpace = THREE.SRGBColorSpace;
-
-            // 캔버스 크기에 따라 카드 크기 계산
-            const cardWidthRatio = 0.0667567568;
-            const cardHeightRatio = 0.17561983471;
-
-            // Mesh 생성
-            createMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
-        }, (err) => {
-            console.error('An error happened', err);
-        });
-
-        loadImageTexture(NecromancerOublyLvMaxImage, (imageBitmap) => {
-            const texture = new THREE.CanvasTexture(imageBitmap);
-            texture.colorSpace = THREE.SRGBColorSpace;
-
-            // 캔버스 크기에 따라 카드 크기 계산
-            const cardWidthRatio = 0.0667567568;
-            const cardHeightRatio = 0.17561983471;
-
-            // Mesh 생성
-            createMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
-        }, (err) => {
-            console.error('An error happened', err);
-        });
-
-        loadImageTexture(GatesOfHellImage, (imageBitmap) => {
-            const texture = new THREE.CanvasTexture(imageBitmap);
-            texture.colorSpace = THREE.SRGBColorSpace;
-
-            // 캔버스 크기에 따라 카드 크기 계산
-            const cardWidthRatio = 0.0667567568;
-            const cardHeightRatio = 0.17561983471;
-
-            // Mesh 생성
-            createMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
-        }, (err) => {
-            console.error('An error happened', err);
-        });
-
-        loadImageTexture(SecondComingOfJudgementImage, (imageBitmap) => {
-            const texture = new THREE.CanvasTexture(imageBitmap);
-            texture.colorSpace = THREE.SRGBColorSpace;
-
-            // 캔버스 크기에 따라 카드 크기 계산
-            const cardWidthRatio = 0.0667567568;
-            const cardHeightRatio = 0.17561983471;
-
-            // Mesh 생성
-            createMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
-        }, (err) => {
-            console.error('An error happened', err);
-        });
-
-        loadImageTexture(PhoenixImage, (imageBitmap) => {
-            const texture = new THREE.CanvasTexture(imageBitmap);
-            texture.colorSpace = THREE.SRGBColorSpace;
-
-            // 캔버스 크기에 따라 카드 크기 계산
-            const cardWidthRatio = 0.0667567568;
-            const cardHeightRatio = 0.17561983471;
-
-            // Mesh 생성
-            createMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
-        }, (err) => {
-            console.error('An error happened', err);
-        });
+        // loadImageTexture(NetherBladeImage, (imageBitmap) => {
+        //     const texture = new THREE.CanvasTexture(imageBitmap);
+        //     texture.colorSpace = THREE.SRGBColorSpace;
+        //
+        //     // 캔버스 크기에 따라 카드 크기 계산
+        //     const cardWidthRatio = 0.0667567568;
+        //     const cardHeightRatio = 0.17561983471;
+        //
+        //     // Mesh 생성
+        //     createMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
+        // }, (err) => {
+        //     console.error('An error happened', err);
+        // });
+        //
+        // loadImageTexture(KnightOfLightEsterosImage, (imageBitmap) => {
+        //     const texture = new THREE.CanvasTexture(imageBitmap);
+        //     texture.colorSpace = THREE.SRGBColorSpace;
+        //
+        //     // 캔버스 크기에 따라 카드 크기 계산
+        //     const cardWidthRatio = 0.0667567568;
+        //     const cardHeightRatio = 0.17561983471;
+        //
+        //     // Mesh 생성
+        //     createMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
+        // }, (err) => {
+        //     console.error('An error happened', err);
+        // });
+        //
+        // loadImageTexture(WarlordLeonidasImage, (imageBitmap) => {
+        //     const texture = new THREE.CanvasTexture(imageBitmap);
+        //     texture.colorSpace = THREE.SRGBColorSpace;
+        //
+        //     // 캔버스 크기에 따라 카드 크기 계산
+        //     const cardWidthRatio = 0.0667567568;
+        //     const cardHeightRatio = 0.17561983471;
+        //
+        //     // Mesh 생성
+        //     createMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
+        // }, (err) => {
+        //     console.error('An error happened', err);
+        // });
+        //
+        // loadImageTexture(NecromancerOublyLvMaxImage, (imageBitmap) => {
+        //     const texture = new THREE.CanvasTexture(imageBitmap);
+        //     texture.colorSpace = THREE.SRGBColorSpace;
+        //
+        //     // 캔버스 크기에 따라 카드 크기 계산
+        //     const cardWidthRatio = 0.0667567568;
+        //     const cardHeightRatio = 0.17561983471;
+        //
+        //     // Mesh 생성
+        //     createMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
+        // }, (err) => {
+        //     console.error('An error happened', err);
+        // });
+        //
+        // loadImageTexture(GatesOfHellImage, (imageBitmap) => {
+        //     const texture = new THREE.CanvasTexture(imageBitmap);
+        //     texture.colorSpace = THREE.SRGBColorSpace;
+        //
+        //     // 캔버스 크기에 따라 카드 크기 계산
+        //     const cardWidthRatio = 0.0667567568;
+        //     const cardHeightRatio = 0.17561983471;
+        //
+        //     // Mesh 생성
+        //     createMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
+        // }, (err) => {
+        //     console.error('An error happened', err);
+        // });
+        //
+        // loadImageTexture(SecondComingOfJudgementImage, (imageBitmap) => {
+        //     const texture = new THREE.CanvasTexture(imageBitmap);
+        //     texture.colorSpace = THREE.SRGBColorSpace;
+        //
+        //     // 캔버스 크기에 따라 카드 크기 계산
+        //     const cardWidthRatio = 0.0667567568;
+        //     const cardHeightRatio = 0.17561983471;
+        //
+        //     // Mesh 생성
+        //     createMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
+        // }, (err) => {
+        //     console.error('An error happened', err);
+        // });
+        //
+        // loadImageTexture(PhoenixImage, (imageBitmap) => {
+        //     const texture = new THREE.CanvasTexture(imageBitmap);
+        //     texture.colorSpace = THREE.SRGBColorSpace;
+        //
+        //     // 캔버스 크기에 따라 카드 크기 계산
+        //     const cardWidthRatio = 0.0667567568;
+        //     const cardHeightRatio = 0.17561983471;
+        //
+        //     // Mesh 생성
+        //     createMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
+        // }, (err) => {
+        //     console.error('An error happened', err);
+        // });
 
         // 마우스 클릭 이벤트 리스너 등록
         canvas.addEventListener('mousedown', (event) => this.onMouseDown(event, camera, scene), false);
@@ -285,6 +314,14 @@ export default {
             this.isMouseDown = false;
             // 이동 중인 객체 초기화
             this.activeObject = null;
+        },
+        initPickableCardControl() {
+            this.pickableCardControl = new PickableCardControl();
+        },
+        placeCards(cardNumber, scene) {
+            const aspect = window.innerWidth / window.innerHeight;
+            this.pickableCardControl.setAspect(aspect)
+            this.pickableCardControl.initBattleFieldHandCard(cardNumber, scene);
         }
     },
     beforeUnmount() {

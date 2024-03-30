@@ -8,6 +8,12 @@ node_modules
 # exclude *.mp3
 *.mp3
 
+# exclude *.csv
+*.csv
+
+# exclude every_card_info.js
+every_card_info.js
+
 # local env files
 .env.local
 .env.*.local
