@@ -79,6 +79,7 @@ export function createBattleFieldCardMesh(texture, cardWidthRatio, cardHeightRat
 
     battleFieldCardMesh.position.x += cardPosition.x;
     battleFieldCardMesh.position.y += cardPosition.y;
+    console.log('battleFieldCardMesh.position: ', battleFieldCardMesh.position)
 
     battleFieldCardMesh.userData.isAreaRectangle = false;
 
@@ -86,7 +87,8 @@ export function createBattleFieldCardMesh(texture, cardWidthRatio, cardHeightRat
     return battleFieldCardMesh
 }
 
-export function createCardRaceMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect) {
+export function createCardRaceMesh(texture, cardWidthRatio, cardHeightRatio, aspect) {
+    console.log('createCardRaceMesh()')
     const cardRaceMaterial = new THREE.MeshBasicMaterial({
         color: 0xffffff,
         map: texture,
@@ -96,13 +98,13 @@ export function createCardRaceMesh(texture, scene, cardWidthRatio, cardHeightRat
     const cardWidth = cardWidthRatio * 2 * aspect;
     const cardHeight = cardHeightRatio * 2 * aspect;
 
-    const cardPosition = calculateCardPosition(cardWidthRatio, cardHeightRatio, aspect);
+    // const cardPosition = calculateCardPosition(cardWidthRatio, cardHeightRatio, aspect);
 
     const cardRaceMeshGeometry = new THREE.PlaneGeometry(cardWidth, cardHeight);
     const cardRaceMesh = new THREE.Mesh(cardRaceMeshGeometry, cardRaceMaterial);
 
-    cardRaceMesh.position.x += cardPosition.x;
-    cardRaceMesh.position.y += cardPosition.y;
+    // cardRaceMesh.position.x += cardPosition.x;
+    // cardRaceMesh.position.y += cardPosition.y;
 
     cardRaceMesh.userData.isAreaRectangle = false;
 

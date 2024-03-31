@@ -21,13 +21,13 @@ import battleFieldBackgoundImage from '@/assets/eddi_tcg_game/images/battle_fiel
 // import WarlordLeonidasImage from '@/assets/eddi_tcg_game/images/battle_field_card/133.png';
 // import NecromancerOublyLvMaxImage from '@/assets/eddi_tcg_game/images/battle_field_card/176.png';
 
-import UndeadRaceImage from '@/assets/eddi_tcg_game/images/card_race/2.png'
+// import UndeadRaceImage from '@/assets/eddi_tcg_game/images/card_race/2.png'
 
-import {loadImageTexture, createCardRaceMesh} from '@/components/webgl/image_texture_control.js';
+// import {loadImageTexture, createCardRaceMesh} from '@/components/webgl/image_texture_control.js';
 import { createRectangle } from '@/components/webgl/shape_control.js';
 
 import { PickableCardControl } from '@/components/your_hand_pickable_card/pickable_card_control.js'
-import ImageTextureKinds from "@/components/image_texture/image_texture_kinds";
+// import ImageTextureKinds from "@/components/image_texture/image_texture_kinds";
 
 export default {
     data() {
@@ -89,24 +89,24 @@ export default {
 
         this.placeCards(134, scene)
 
-        loadImageTexture(UndeadRaceImage, (imageBitmap) => {
-            const texture = new THREE.CanvasTexture(imageBitmap);
-            texture.colorSpace = THREE.SRGBColorSpace;
-            // texture.alpha = THREE.AlphaFormat;
-            texture.transparent = true;
-            console.log('texture: ', texture)
-
-            // 캔버스 크기에 따라 카드 크기 계산
-            const cardWidthRatio = 0.0667567568;
-            const cardHeightRatio = 0.17561983471;
-
-            // Mesh 생성
-            const cardRaceMesh = createCardRaceMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
-            cardRaceMesh.userData.imageTextureKinds = ImageTextureKinds.FRAME
-            scene.add(cardRaceMesh)
-        }, (err) => {
-            console.error('An error happened', err);
-        });
+        // loadImageTexture(UndeadRaceImage, (imageBitmap) => {
+        //     const texture = new THREE.CanvasTexture(imageBitmap);
+        //     texture.colorSpace = THREE.SRGBColorSpace;
+        //     // texture.alpha = THREE.AlphaFormat;
+        //     texture.transparent = true;
+        //     console.log('texture: ', texture)
+        //
+        //     // 캔버스 크기에 따라 카드 크기 계산
+        //     const cardWidthRatio = 0.0667567568;
+        //     const cardHeightRatio = 0.17561983471;
+        //
+        //     // Mesh 생성
+        //     const cardRaceMesh = createCardRaceMesh(texture, scene, cardWidthRatio, cardHeightRatio, aspect);
+        //     cardRaceMesh.userData.imageTextureKinds = ImageTextureKinds.FRAME
+        //     scene.add(cardRaceMesh)
+        // }, (err) => {
+        //     console.error('An error happened', err);
+        // });
 
         // loadImageTexture(BoneDragonImage, (imageBitmap) => {
         //     const texture = new THREE.CanvasTexture(imageBitmap);
