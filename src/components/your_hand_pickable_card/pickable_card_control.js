@@ -87,19 +87,28 @@ export class PickableCardControl {
             // Mesh 생성
             const battleFieldCardMesh = createBattleFieldCardMesh(texture, cardWidthRatio, cardHeightRatio, this.aspect);
             battleFieldCardMesh.userData.imageTextureKinds = ImageTextureKinds.FRAME
+            this.pickableCardBase = battleFieldCardMesh
             scene.add(battleFieldCardMesh)
+
+            const functionName = this.cardController.getCardTypeTable(this.cardInfo.findCardTypeByCardNumber(cardNumber));
+            console.log('functionName: ', functionName)
+            const cardShapes = CardCreationController[functionName](this.localTranslation, scene, cardNumber, cardWidthRatio, cardHeightRatio, this.aspect);
+            console.log('cardShapes: ', cardShapes)
+            this.setAttachedShapes(cardShapes)
         }, (err) => {
             console.error('An error happened', err);
         });
 
-        const functionName = this.cardController.getCardTypeTable(this.cardInfo.findCardTypeByCardNumber(cardNumber));
-        console.log('functionName: ', functionName)
-        const cardShapes = CardCreationController[functionName](this.localTranslation, cardNumber, cardWidthRatio, cardHeightRatio, this.aspect);
-        for (const shape of cardShapes) {
-            console.log('initBattleFieldHandCard() -> shape: ', shape)
-            this.pickableCardBase.setAttachedShapes(shape);
-            scene.add(shape)
-        }
+        // const functionName = this.cardController.getCardTypeTable(this.cardInfo.findCardTypeByCardNumber(cardNumber));
+        // console.log('functionName: ', functionName)
+        // const cardShapes = CardCreationController[functionName](this.localTranslation, scene, cardNumber, cardWidthRatio, cardHeightRatio, this.aspect);
+        // console.log('cardShapes: ', cardShapes)
+        // this.pickableCardBase.setAttachedShapes(cardShapes)
+        // for (const shape of cardShapes) {
+        //     console.log('initBattleFieldHandCard() -> shape: ', shape)
+        //     this.pickableCardBase.setAttachedShapes(shape);
+        //     scene.add(shape)
+        // }
     }
 }
 

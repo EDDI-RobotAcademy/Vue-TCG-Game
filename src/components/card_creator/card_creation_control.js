@@ -20,11 +20,11 @@ const CardCreationController = {
             return null;
         }
     },
-    unitCardInitShapes(localTranslation, cardNumber, cardWidthRatio, cardHeightRatio, aspect) {
+    unitCardInitShapes(localTranslation, scene, cardNumber, cardWidthRatio, cardHeightRatio, aspect) {
         console.log('unitCardInitShapes()')
         const circleRadiusRatio = 0.01082251082 // 20 / 1848
         const unitCard = new UnitCard(localTranslation);
-        unitCard.init_your_hand_shapes(circleRadiusRatio, cardNumber, cardWidthRatio, cardHeightRatio, aspect);
+        unitCard.init_your_hand_shapes(circleRadiusRatio, scene, cardNumber, cardWidthRatio, cardHeightRatio, aspect);
         console.log('unitCardInitShapes() -> unitCard.get_shapes(): ', unitCard.get_shapes())
         return unitCard.get_shapes();
     },
